@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Message Classifier</title>
+  <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+    <link rel="stylesheet" href="static_files/vue_default.css">
+<link rel="stylesheet" href="static_files/bootstrap.min.css"
+      integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+        <script src="static_files/vue.js"></script>
+    <script src="static_files/vue_material.min.js"></script>
+</head>
+<body>
+<div>
+<div class="text-center">
+
+    <div id="message_content">
+        <h1>{{title}}</h1>
+            <iframe id="iframe_message" :onload="iframeLoaded" :src="messageDomain" ></iframe>
+    </div>
+
+   <div id="app">
+        <span>
+       <md-button v-on:click="sendAnswerYes" class="btn btn-success btn-lg">Yes</md-button>
+       <md-button v-on:click="sendAnswerNo" class="btn btn-danger btn-lg">No</md-button>
+       <md-button v-on:click="sendAnswerSkip" class="btn btn-secondary btn-lg">Skip</md-button>
+        </span>
+    </div>
+
+</div>
+    </div>
+    <script>
+
+      Vue.use(VueMaterial.default);
+
+        var message_element_view = new Vue({
+            el: '#message_content',
+            data: {
+                title: 'Is this Message Receipt?',
+                messageDomain: 'https://getbootstrap.com'
+            },
+            mounted: function(){
+                this.iframeLoaded();
+            },
+            methods: {
+                iframeLoaded: function () {
+                  var iFrameID = document.getElementById('iframe_message');
+                  if(iFrameID) {
+                      iFrameID.height = "";
+                      iFrameID.width = "";
+                      var width = 1000;
+                      var scrollWidth = iFrameID.contentWindow.document.body.scrollWidth;
+                      if(scrollWidth> width){
+                          width = scrollWidth;
+                      }
+                      iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + 500+ "px";
+                      iFrameID.width = width + "px";
+                  }
+                }
+            }
+        });
+
+      var app = new Vue({
+        el: '#app',
+                    methods: {
+                        sendAnswerYes: function () {
+                            // TODO send answer message_id + yes/no
+                            // TODO load next message get next iframe to display
+                            console.log("answered yes");
+                            this.handelingNextMessage(1);
+                        },
+                        sendAnswerNo: function () {
+                            console.log("answered no");
+                            this.handelingNextMessage(0);
+                        },
+                        sendAnswerSkip: function (){
+                            console.log("answered skip");
+                            this.handelingNextMessage(null);
+                        },
+                        handelingNextMessage: function (answer){
+                            console.log("loading next message..."+answer);
+                            message_element_view.messageDomain = 'https://vuejs.org';
+                        }
+                    }
+      });
+    </script>
+</body>
+</html>
